@@ -70,6 +70,8 @@ MyApp.getInitialProps = async ({ ctx }) => {
     const pathname = ctx.pathname;
     const res = ctx.res;
 
+    console.log(pathname)
+
     /**
      * Abort if one var is not present.
      * For example, the req obj will be undefined if we don't
