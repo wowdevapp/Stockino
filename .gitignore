@@ -1,5 +1,7 @@
 /node_modules
 /front-mat/node_modules
+/front-mat/.idea
+/front-mat/.next/*
 /public/hot
 /public/storage
 /storage/*.key
@@ -14,3 +16,15 @@ npm-debug.log
 yarn-error.log
 .env.local
 .idea
+front-mat/.next/static/chunks/pages/login.js
+front-mat/.next/trace
+front-mat/.next/cache/webpack/client-development/5.pack
+front-mat/.next/cache/webpack/client-development/index.pack
+front-mat/.next/cache/webpack/client-development/index.pack.old
+front-mat/.next/cache/webpack/server-development/4.pack
+front-mat/.next/cache/webpack/server-development/index.pack
+front-mat/.next/cache/webpack/server-development/index.pack.old
+front-mat/.next/server/pages-manifest.json
+front-mat/.next/server/pages/login.js
+front-mat/.next/static/chunks/webpack.js
+front-mat/.next/static/chunks/pages/login.js

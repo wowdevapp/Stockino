@@ -132,12 +132,14 @@ const LoginPage = () => {
     control,
     setError,
     handleSubmit,
+    formState,
     formState: { errors }
   } = useForm({
     defaultValues,
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
+  console.log(formState);
   const onSubmit = (data: FormData) => {
     console.log(data);
     return
