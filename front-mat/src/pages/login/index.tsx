@@ -138,7 +138,6 @@ const LoginPage = () => {
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
-
   const onSubmit = (data: FormData) => {
     console.log(data);
     return
