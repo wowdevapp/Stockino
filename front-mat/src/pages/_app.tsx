@@ -135,9 +135,7 @@ const App = (props: ExtendedAppProps) => {
                   <ThemeComponent settings={settings}>
                     <WindowWrapper>
                       <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                        <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
                           {getLayout(<Component {...pageProps} />)}
-                        </AclGuard>
                       </Guard>
                     </WindowWrapper>
                     <ReactHotToast>

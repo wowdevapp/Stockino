@@ -139,10 +139,8 @@ const LoginPage = () => {
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
-  console.log(formState);
+  
   const onSubmit = (data: FormData) => {
-    console.log(data);
-    return
     const { email, password } = data
     auth.login({ email, password }, () => {
       setError('email', {

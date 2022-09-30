@@ -50,16 +50,17 @@ const AuthProvider = ({ children }: Props) => {
         await axios
           .get(authConfig.meEndpoint, {
             headers: {
-              Authorization: storedToken
+              Authorization:`Bearer ${window.localStorage.getItem(authConfig.storageTokenKeyName)}`
             }
           })
           .then(async response => {
+            console.log(response.data);
             setLoading(false)
-            setUser({ ...response.data.userData })
+            setUser({ ...response.data })
           })
           .catch(() => {
             localStorage.removeItem('userData')
-            localStorage.removeItem('refreshToken')
+            localStorage.removeItem('token')
             localStorage.removeItem('accessToken')
             setUser(null)
             setLoading(false)
@@ -70,25 +71,29 @@ const AuthProvider = ({ children }: Props) => {
     }
     initAuth()
   }, [])
-
+  //axios.defaults.withCredentials = true;
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
     axios
-      .post(authConfig.loginEndpoint, params)
+      .post(authConfig.loginEndpoint,JSON.stringify(params),{headers: {
+        'content-type': 'application/json',
+        accept:'application/json',
+      }})
       .then(async res => {
-        window.localStorage.setItem(authConfig.storageTokenKeyName, res.data.accessToken)
+        console.log(res);
+        window.localStorage.setItem(authConfig.storageTokenKeyName, res.data.token)
       })
       .then(() => {
         axios
           .get(authConfig.meEndpoint, {
             headers: {
-              Authorization: window.localStorage.getItem(authConfig.storageTokenKeyName)!
+              Authorization:`Bearer ${window.localStorage.getItem(authConfig.storageTokenKeyName)}`
             }
           })
           .then(async response => {
             const returnUrl = router.query.returnUrl
 
-            setUser({ ...response.data.userData })
-            await window.localStorage.setItem('userData', JSON.stringify(response.data.userData))
+            setUser({ ...response.data })
+            await window.localStorage.setItem('userData', JSON.stringify(response.data))
 
             const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
