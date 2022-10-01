@@ -51,7 +51,6 @@ const UserLayout = ({ children }: Props) => {
         ? {
             // ** Navigation Items
             horizontalNavItems: HorizontalNavItems(),
-
             // Uncomment the below line when using server-side menu in horizontal layout and comment the above line
             // horizontalNavItems: ServerSideHorizontalNavItems(),
 

@@ -37,7 +37,7 @@ const ListSubheader = styled((props: ListSubheaderProps) => <MuiListSubheader co
 const VerticalNavSectionTitle = (props: Props) => {
   // ** Props
   const { item, navHover, settings, collapsedNavWidth, navigationBorderWidth } = props
-
+console.log(item)
   // ** Hook
   const theme = useTheme()
 
@@ -77,7 +77,6 @@ const VerticalNavSectionTitle = (props: Props) => {
   }
 
   return (
-    <CanViewNavSectionTitle navTitle={item}>
       <ListSubheader
         className='nav-section-title'
         sx={{
@@ -109,7 +108,6 @@ const VerticalNavSectionTitle = (props: Props) => {
           )}
         </Divider>
       </ListSubheader>
-    </CanViewNavSectionTitle>
   )
 }
 

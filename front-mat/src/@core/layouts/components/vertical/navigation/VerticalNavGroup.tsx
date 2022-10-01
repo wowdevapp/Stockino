@@ -93,7 +93,6 @@ const VerticalNavGroup = (props: Props) => {
   const router = useRouter()
   const currentURL = router.pathname
   const { skin, direction, navCollapsed, verticalNavToggleType } = settings
-
   // ** Accordion menu group open toggle
   const toggleActiveGroup = (item: NavGroup, parent: NavGroup | undefined) => {
     let openGroup = groupActive
@@ -148,6 +147,7 @@ const VerticalNavGroup = (props: Props) => {
     } else {
       toggleActiveGroup(item, parent)
     }
+    
   }
 
   useEffect(() => {
@@ -255,7 +255,6 @@ const VerticalNavGroup = (props: Props) => {
   }
 
   return (
-    <CanViewNavGroup navGroup={item}>
       <Fragment>
         <ListItem
           disablePadding
@@ -358,7 +357,6 @@ const VerticalNavGroup = (props: Props) => {
           </Collapse>
         </ListItem>
       </Fragment>
-    </CanViewNavGroup>
   )
 }
 

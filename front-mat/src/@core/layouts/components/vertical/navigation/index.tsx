@@ -65,7 +65,6 @@ const Navigation = (props: Props) => {
     beforeVerticalNavMenuContent,
     verticalNavMenuContent: userVerticalNavMenuContent
   } = props
-
   // ** States
   const [groupActive, setGroupActive] = useState<string[]>([])
   const [currentActiveGroup, setCurrentActiveGroup] = useState<string[]>([])
@@ -171,7 +170,7 @@ const Navigation = (props: Props) => {
           {userVerticalNavMenuContent ? (
             userVerticalNavMenuContent(props)
           ) : (
-            <List className='nav-items' sx={{ pt: 0, '& > :first-child': { mt: '0' } }}>
+            <List className='nav-items' sx={{ pt: 0, mt: '0'}}>
               <VerticalNavItems
                 groupActive={groupActive}
                 setGroupActive={setGroupActive}

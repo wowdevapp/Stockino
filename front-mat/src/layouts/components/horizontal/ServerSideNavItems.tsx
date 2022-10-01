@@ -17,7 +17,7 @@ const ServerSideNavItems = () => {
   useEffect(() => {
     axios.get('/api/horizontal-nav/data').then(response => {
       const menuArray = response.data
-
+      console.log(menuArray);
       /**
        *  Replace the icon string with the component
        *  If you don't want to import the whole icon library
