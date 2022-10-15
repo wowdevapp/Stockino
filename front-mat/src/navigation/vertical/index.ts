@@ -25,7 +25,7 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
 const navigation = (): VerticalNavItemsType => {
   return [
-    {
+    /* {
       title: 'Dashboards',
       icon: HomeOutline,
       badgeContent: 'new',
@@ -57,6 +57,16 @@ const navigation = (): VerticalNavItemsType => {
           title: 'View',
           path: '/apps/user/view'
         }
+      ]
+    }, */
+    {
+      title: 'Settings',
+      icon: ShieldOutline,
+      children: [
+        {
+          title: 'General Settings',
+          path: '/settings/general-settings'
+        },
       ]
     },
   ]
