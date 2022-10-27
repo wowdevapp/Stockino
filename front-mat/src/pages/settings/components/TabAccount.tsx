@@ -49,7 +49,6 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 
 const TabAccount = () => {
     // ** State
-    const [openAlert, setOpenAlert] = useState<boolean>(true)
     const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
 
     const onChange = (file: ChangeEvent) => {
@@ -97,53 +96,22 @@ const TabAccount = () => {
                         <TextField fullWidth type='number' label='Phone' placeholder='(123) 456-7890' />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        {/* <FormControl fullWidth>
-                            <InputLabel>Role</InputLabel>
-                            <Select label='Role' defaultValue='admin'>
-                                <MenuItem value='admin'>Admin</MenuItem>
-                                <MenuItem value='author'>Author</MenuItem>
-                                <MenuItem value='editor'>Editor</MenuItem>
-                                <MenuItem value='maintainer'>Maintainer</MenuItem>
-                                <MenuItem value='subscriber'>Subscriber</MenuItem>
-                            </Select>
-                        </FormControl> */}
+                        <TextField fullWidth type="text" label='customer parent account number' placeholder='customer parent account number' />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField fullWidth type="text" label='suppliers parent account number' placeholder='suppliers parent account number' />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField fullWidth label='General alert' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField fullWidth label='com code' placeholder='com code' defaultValue='278373688' />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
                         <Box sx={{ mb: 2 }}>
-                            <FormControlLabel control={<Switch defaultChecked />} label='Weekly product updates' />
+                            <FormControlLabel control={<Switch defaultChecked />} label='Active' />
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Status</InputLabel>
-                            <Select label='Status' defaultValue='active'>
-                                <MenuItem value='active'>Active</MenuItem>
-                                <MenuItem value='inactive'>Inactive</MenuItem>
-                                <MenuItem value='pending'>Pending</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
-                    </Grid>
-
-                    {openAlert ? (
-                        <Grid item xs={12}>
-                            <Alert
-                                severity='warning'
-                                sx={{ '& a': { fontWeight: 400 } }}
-                                action={
-                                    <IconButton size='small' color='inherit' aria-label='close' onClick={() => setOpenAlert(false)}>
-                                        <Close fontSize='inherit' />
-                                    </IconButton>
-                                }
-                            >
-                                <AlertTitle sx={{ mb: '.15rem' }}>Your email is not confirmed. Please check your inbox.</AlertTitle>
-                                <Link href='/' onClick={(e: SyntheticEvent) => e.preventDefault()}>
-                                    Resend Confirmation
-                                </Link>
-                            </Alert>
-                        </Grid>
-                    ) : null}
-
                     <Grid item xs={12}>
                         <Button variant='contained' sx={{ mr: 4 }}>
                             Save Changes
