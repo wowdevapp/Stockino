@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -60,10 +61,9 @@ class AuthController extends Controller
      * @param Request $request
      * @return User
      */
-    public function loginUser(Request $request)
+    public function login(Request $request)
     {
 
-        try {
             $validateUser = Validator::make($request->all(),
             [
                 'email' => 'required|email',
@@ -93,11 +93,14 @@ class AuthController extends Controller
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
 
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
+    }
+
+    public function logOut(){
+
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'message'=>'user loged out succes'
+        ],Response::HTTP_OK);
+
     }
 }

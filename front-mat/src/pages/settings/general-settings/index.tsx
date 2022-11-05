@@ -1,6 +1,6 @@
 import React from 'react'
 //import FormValidationBasic from 'src/views/forms/form-validation/FormValidationBasic'
-import GeneralSettingsForm from '../components/GeneralSettingsForm'
+import GeneralSettings from '../components/GeneralSettings'
 import PageHeader from 'src/@core/components/page-header'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -19,7 +19,7 @@ export default function index() {
         }
       />
       <Grid item xs={12}>
-        <GeneralSettingsForm />
+        <GeneralSettings />
       </Grid>
     </Grid>
   )

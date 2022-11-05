@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\GeneralSettingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +15,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-    Route::post('/auth/register', [AuthController::class, 'createUser']);
-    Route::post('/auth/login', [AuthController::class, 'loginUser']);
+Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logOut'])->name('logout');
+    Route::post('/save-settings', [GeneralSettingsController::class, 'store']);
+});

@@ -1,72 +1,230 @@
 // ** React Imports
-import { SyntheticEvent, useState } from 'react'
-
+import { useState, ElementType, ChangeEvent, SyntheticEvent } from "react";
+import { useFormik } from "formik";
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import TabList from '@mui/lab/TabList'
-import TabPanel from '@mui/lab/TabPanel'
-import TabContext from '@mui/lab/TabContext'
-import { styled } from '@mui/material/styles'
-import MuiTab, { TabProps } from '@mui/material/Tab'
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import CardContent from "@mui/material/CardContent";
+import Button, { ButtonProps } from "@mui/material/Button";
 
 // ** Icons Imports
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-// ** Demo Tabs Imports
-import TabAccount from '../components/TabAccount'
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import { AppDispatch, RootState } from "src/store";
+import { useDispatch,useSelector } from "react-redux";
+import {addSettings} from "src/store/apps/settings"
+interface MyFormValues {
+    system_name: string;
+    phone: string;
+    customer_parent_account_number: string;
+    suppliers_parent_account_number: string;
+    general_alert: string;
+    com_code: string;
+    active: boolean;
+    address:string
+}
+const ImgStyled = styled("img")(({ theme }) => ({
+    width: 120,
+    height: 120,
+    marginRight: theme.spacing(5),
+    borderRadius: theme.shape.borderRadius,
+}));
 
-// ** Third Party Styles Imports
-import 'react-datepicker/dist/react-datepicker.css'
+const ButtonStyled = styled(Button)<
+    ButtonProps & { component?: ElementType; htmlFor?: string }
+>(({ theme }) => ({
+    [theme.breakpoints.down("sm")]: {
+        width: "100%",
+        textAlign: "center",
+    },
+}));
 
-const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
-  [theme.breakpoints.down('md')]: {
-    minWidth: 100
-  },
-  [theme.breakpoints.down('sm')]: {
-    minWidth: 67
-  }
-}))
-
-const TabName = styled('span')(({ theme }) => ({
-  lineHeight: 1.71,
-  marginLeft: theme.spacing(2.5),
-  [theme.breakpoints.down('md')]: {
-    display: 'none'
-  }
-}))
+const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
+    marginLeft: theme.spacing(4),
+    [theme.breakpoints.down("sm")]: {
+        width: "100%",
+        marginLeft: 0,
+        textAlign: "center",
+        marginTop: theme.spacing(4),
+    },
+}));
 
 const GeneralSettingsForm = () => {
-  // ** State
-  const [value, setValue] = useState<string>('account')
+    // ** State
+    const [imgSrc, setImgSrc] = useState<string>("/images/avatars/1.png");
+    const store = useSelector((state: RootState) => state.settings)
+    const dispatch = useDispatch<AppDispatch>()
+    
+    const firstValues: MyFormValues = {
+        system_name: "Test",
+        phone: "",
+        customer_parent_account_number: "",
+        suppliers_parent_account_number: "",
+        general_alert: "",
+        com_code: "",
+        active: true,
+        address:""
+    };
+    const {values,handleChange,handleSubmit} = useFormik({
+        initialValues:firstValues,
+        onSubmit: (values) => {
+            dispatch(addSettings(values));
+        },
+    });
 
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
-    setValue(newValue)
-  }
+    const onChange = (file: ChangeEvent) => {
+        const reader = new FileReader();
+        const { files } = file.target as HTMLInputElement;
+        if (files && files.length !== 0) {
+            reader.onload = () => setImgSrc(reader.result as string);
 
-  return (
-    <Card>
-      <TabContext value={value}>
-        <TabList
-          onChange={handleChange}
-          aria-label='account-settings tabs'
-          sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
-        >
-          <Tab
-            value='account'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <AccountOutline sx={{ fontSize: '1.125rem' }} />
-                <TabName>Account</TabName>
-              </Box>
-            }
-          />
-        </TabList>
-        <TabPanel sx={{ p: 0 }} value='account'>
-          <TabAccount />
-        </TabPanel>
-      </TabContext>
-    </Card>
-  )
-}
+            reader.readAsDataURL(files[0]);
+        }
+    };
 
-export default GeneralSettingsForm
+    return (
+        <CardContent>
+            <form onSubmit={handleSubmit}>
+                <Grid container spacing={6}>
+                    <Grid item xs={12} sx={{ my: 5 }}>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <ImgStyled src={imgSrc} alt="Profile Pic" />
+                            <Box>
+                                <ButtonStyled
+                                    component="label"
+                                    variant="contained"
+                                    htmlFor="account-settings-upload-image"
+                                >
+                                    Company Logo
+                                    <input
+                                        hidden
+                                        type="file"
+                                        onChange={onChange}
+                                        accept="image/png, image/jpeg"
+                                        id="account-settings-upload-image"
+                                    />
+                                </ButtonStyled>
+                                <ResetButtonStyled
+                                    color="error"
+                                    variant="outlined"
+                                    onClick={() =>
+                                        setImgSrc("/images/avatars/1.png")
+                                    }
+                                >
+                                    Reset
+                                </ResetButtonStyled>
+                                <Typography
+                                    sx={{ mt: 4 }}
+                                    component="p"
+                                    variant="caption"
+                                >
+                                    Allowed PNG or JPEG. Max size of 800K.
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            fullWidth
+                            label="System Name"
+                            placeholder="system name"
+                            name="system_name"
+                            value={values.system_name}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            fullWidth
+                            label="Phone"
+                            placeholder="(123) 456-7890"
+                            name="phone"
+                            value={values.phone}
+                            onChange={handleChange}
+                            
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            label="customer parent account number"
+                            placeholder="customer parent account number"
+                            name="customer_parent_account_number"
+                            value={values.customer_parent_account_number}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            label="suppliers parent account number"
+                            placeholder="suppliers parent account number"
+                            name="suppliers_parent_account_number"
+                            value={values.suppliers_parent_account_number}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            fullWidth
+                            label="General alert"
+                            placeholder="ABC Pvt. Ltd."
+                            name="general_alert"
+                            value={values.general_alert}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            fullWidth
+                            label="Adress"
+                            placeholder="adress"
+                            name="address"
+                            value={values.address}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            fullWidth
+                            label="com code"
+                            placeholder="com code"
+                            name="com_code"
+                            value={values.com_code}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Box sx={{ mb: 2 }}>
+                            <FormControlLabel
+                            
+                            control={<Switch name="active"  value={values.active} onChange={handleChange} defaultChecked />}
+                                label="Active"
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button variant="contained" type="submit" sx={{ mr: 4 }}>
+                            Save Changes
+                        </Button>
+                        <Button
+                            type="reset"
+                            variant="outlined"
+                            color="secondary"
+                        >
+                            Reset
+                        </Button>
+                    </Grid>
+                </Grid>
+            </form>
+        </CardContent>
+    );
+};
+
+export default GeneralSettingsForm;
