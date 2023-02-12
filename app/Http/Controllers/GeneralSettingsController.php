@@ -35,13 +35,12 @@ class GeneralSettingsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param GeneralSettingsRequest $request
      * @return JsonResponse
      */
     public function store(GeneralSettingsRequest $request): JsonResponse
     {
-        $settings= new GeneralSetting();
-        $data=$settings->create($request->all());
+        $data=GeneralSetting::updateOrCreate(['com_code'=>auth()->user()->com_code],$request->getData());
         return response()->json([
             'data'=>$data,
             'message'=>'successfully added settings'
@@ -52,11 +51,14 @@ class GeneralSettingsController extends Controller
      * Display the specified resource.
      *
      * @param GeneralSetting $generalSetting
-     * @return Response
+     * @return JsonResponse
      */
-    public function show(GeneralSetting $generalSetting)
+    public function show(GeneralSetting $generalSetting): JsonResponse
     {
-        //
+        $settings=GeneralSetting::where('com_code',auth()->user()->com_code)->first();
+        return response()->json([
+            'data'=>$settings
+        ]);
     }
 
     /**

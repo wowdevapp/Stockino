@@ -21,4 +21,5 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logOut'])->name('logout');
     Route::post('/save-settings', [GeneralSettingsController::class, 'store']);
+    Route::get('/settings', [GeneralSettingsController::class, 'show']);
 });

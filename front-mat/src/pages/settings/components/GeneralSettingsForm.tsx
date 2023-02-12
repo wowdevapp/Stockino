@@ -14,17 +14,16 @@ import Button, { ButtonProps } from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { AppDispatch, RootState } from "src/store";
-import { useDispatch,useSelector } from "react-redux";
-import {addSettings} from "src/store/apps/settings"
+import { useDispatch, useSelector } from "react-redux";
+import { addSettings } from "src/store/apps/settings";
 interface MyFormValues {
     system_name: string;
     phone: string;
     customer_parent_account_number: string;
     suppliers_parent_account_number: string;
     general_alert: string;
-    com_code: string;
     active: boolean;
-    address:string
+    address: string;
 }
 const ImgStyled = styled("img")(({ theme }) => ({
     width: 120,
@@ -55,21 +54,20 @@ const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
 const GeneralSettingsForm = () => {
     // ** State
     const [imgSrc, setImgSrc] = useState<string>("/images/avatars/1.png");
-    const store = useSelector((state: RootState) => state.settings)
-    const dispatch = useDispatch<AppDispatch>()
-    
+    const store = useSelector((state: RootState) => state.settings);
+    const dispatch = useDispatch<AppDispatch>();
+
     const firstValues: MyFormValues = {
         system_name: "Test",
         phone: "",
         customer_parent_account_number: "",
         suppliers_parent_account_number: "",
         general_alert: "",
-        com_code: "",
         active: true,
-        address:""
+        address: "",
     };
-    const {values,handleChange,handleSubmit} = useFormik({
-        initialValues:firstValues,
+    const { values, handleChange, handleSubmit } = useFormik({
+        initialValues: firstValues,
         onSubmit: (values) => {
             dispatch(addSettings(values));
         },
@@ -145,7 +143,6 @@ const GeneralSettingsForm = () => {
                             name="phone"
                             value={values.phone}
                             onChange={handleChange}
-                            
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -191,26 +188,26 @@ const GeneralSettingsForm = () => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="com code"
-                            placeholder="com code"
-                            name="com_code"
-                            value={values.com_code}
-                            onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
                         <Box sx={{ mb: 2 }}>
                             <FormControlLabel
-                            
-                            control={<Switch name="active"  value={values.active} onChange={handleChange} defaultChecked />}
+                                control={
+                                    <Switch
+                                        name="active"
+                                        value={values.active}
+                                        onChange={handleChange}
+                                        defaultChecked
+                                    />
+                                }
                                 label="Active"
                             />
                         </Box>
                     </Grid>
                     <Grid item xs={12}>
-                        <Button variant="contained" type="submit" sx={{ mr: 4 }}>
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            sx={{ mr: 4 }}
+                        >
                             Save Changes
                         </Button>
                         <Button

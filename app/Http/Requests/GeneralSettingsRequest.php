@@ -57,10 +57,25 @@ class GeneralSettingsRequest extends FormRequest
             'updated_by'=>[
                 'number'
             ],
-            'com_code'=>[
-                'required',
-                'integer'
-            ],
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getData():array
+    {
+        return array_merge($this->only([
+            'system_name',
+            'active',
+            'general_alert',
+            'address',
+            'phone',
+            'customer_parent_account_number',
+            'suppliers_parent_account_number',
+        ]), [
+            'com_code'=>auth()->user()->com_code,
+        ]);
+    }
+
 }

@@ -66,6 +66,16 @@ const navigation = (): VerticalNavItemsType => {
         {
           title: 'General Settings',
           path: '/settings/general-settings'
+        }
+      ]
+    },
+    {
+      title: 'Product',
+      icon: PackageVariantClosed,
+      children: [
+        {
+          title: 'Products List',
+          path: '/product'
         },
       ]
     },
