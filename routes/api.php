@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\GeneralSettingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logOut'])->name('logout');
     Route::post('/save-settings', [GeneralSettingsController::class, 'store']);
     Route::get('/settings', [GeneralSettingsController::class, 'show']);
+    Route::group(['prefix' => 'product'], function () {
+        Route::apiResource('/category', CategoryController::class);
+    });
 });
