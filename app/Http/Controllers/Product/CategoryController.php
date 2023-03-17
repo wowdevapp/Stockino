@@ -7,10 +7,21 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Product\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function index(): AnonymousResourceCollection
+    {
+        $categories=Category::with('parent')->get();
+        return CategoryResource::collection($categories);
+    }
 
 
     /**

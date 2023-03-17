@@ -58,6 +58,28 @@ export const addCategory = createAsyncThunk(
     }
 );
 
+export const fetchCategories= createAsyncThunk(
+    "fetchCategories",
+    async ({}, {rejectWithValue}) => {
+        try {
+            const response = await axios.get(
+                backend.path + "/product/category",
+                {
+                    headers: {
+                        Authorization: `Bearer ${window.localStorage.getItem(
+                            authConfig.storageTokenKeyName
+                        )}`,
+                    },
+                }
+            );
+        return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+        
+    }
+);
+
 export const appProductCategorySlice = createSlice({
     name: "ProductCategory",
     initialState:{
@@ -75,6 +97,15 @@ export const appProductCategorySlice = createSlice({
             state.apiErrors= action.payload
             toast.error(state.apiErrors?.message,{position: 'bottom-center'})
             
+        });
+        //fetch categories
+        builder.addCase(fetchCategories.fulfilled, (state, action) => {
+            state.categories = action.payload.data;
+            //toast.success("category added succefully ?",{position: 'bottom-center'})
+        });
+        builder.addCase(fetchCategories.rejected, (state, action:any) => {
+            state.apiErrors= action.payload
+            toast.error(state.apiErrors?.message,{position: 'bottom-center'})           
         });
     },
 });

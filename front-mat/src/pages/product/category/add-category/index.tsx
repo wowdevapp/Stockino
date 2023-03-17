@@ -42,12 +42,14 @@ import EyeOffOutline from "mdi-material-ui/EyeOffOutline";
 // ** Types
 import { DateType } from "src/types/forms/reactDatepickerTypes";
 
-import { addCategory } from "src/store/apps/product/category";
+import { addCategory, fetchCategories } from "src/store/apps/product/category";
 
 // ** Third Party Imports
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormGroup, Switch } from "@mui/material";
+
+import { Category } from "../../types";
 
 interface FormInputs {
     category_name: string;
@@ -66,9 +68,9 @@ interface CustomInputProps {
 }
 
 const defaultValues = {
-    category_name: "",
+    category_name:"",
     category_slug: "",
-    parent_id: null,
+    parent_id: "",
     description: "",
     active: true,
     thumbnail: "",
@@ -86,6 +88,8 @@ const AddCategoryForm = () => {
   }) */
     const dispatch = useDispatch<AppDispatch>();
     const { apiErrors } = useSelector((state: RootState) => state.category);
+    const { categories } = useSelector((state: RootState) => state.category);
+
 
     const schema = yup.object().shape({
         category_name: yup
@@ -99,9 +103,7 @@ const AddCategoryForm = () => {
     });
 
     const {
-        reset,
         control,
-        setValue,
         handleSubmit,
         setError,
         formState: { errors },
@@ -122,6 +124,7 @@ const AddCategoryForm = () => {
                 });
             }
         }
+        dispatch(fetchCategories());
     }, [apiErrors]);
     return (
         <Card>
@@ -135,7 +138,7 @@ const AddCategoryForm = () => {
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth>
                                 <Controller
-                                    name="category_name"
+                                    name={"category_name"}
                                     control={control}
                                     rules={{ required: true }}
                                     render={({
@@ -196,12 +199,8 @@ const AddCategoryForm = () => {
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth>
                                 <InputLabel
-                                    id="validation-basic-select"
                                     error={Boolean(errors.parent_id)}
-                                    htmlFor="validation-basic-select"
-                                >
-                                    Parent
-                                </InputLabel>
+                                >Parent Category</InputLabel>
                                 <Controller
                                     name="parent_id"
                                     control={control}
@@ -217,14 +216,10 @@ const AddCategoryForm = () => {
                                             labelId="validation-basic-select"
                                             aria-describedby="validation-basic-select"
                                         >
-                                            <MenuItem value={1}>UK</MenuItem>
-                                            <MenuItem value={2}>USA</MenuItem>
-                                            <MenuItem value={3}>
-                                                Australia
-                                            </MenuItem>
-                                            <MenuItem value={4}>
-                                                Germany
-                                            </MenuItem>
+                                            <MenuItem value={""}>{"No Parent Category"}</MenuItem>
+                                            {categories.map((option :Category, index) => (
+                                                <MenuItem key={index} value={option.id}>{option.category_name}</MenuItem>
+                                            ))}
                                         </Select>
                                     )}
                                 />
