@@ -60,7 +60,7 @@ export const addCategory = createAsyncThunk(
 
 export const fetchCategories= createAsyncThunk(
     "fetchCategories",
-    async ({}, {rejectWithValue}) => {
+    async (params:{}, {rejectWithValue}) => {
         try {
             const response = await axios.get(
                 backend.path + "/product/category",
@@ -70,6 +70,7 @@ export const fetchCategories= createAsyncThunk(
                             authConfig.storageTokenKeyName
                         )}`,
                     },
+                    params
                 }
             );
         return response.data;
@@ -85,7 +86,8 @@ export const appProductCategorySlice = createSlice({
     initialState:{
         categories: [],
         selectedCategory: null,
-        apiErrors:null
+        apiErrors:null,
+        total:0
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -101,6 +103,7 @@ export const appProductCategorySlice = createSlice({
         //fetch categories
         builder.addCase(fetchCategories.fulfilled, (state, action) => {
             state.categories = action.payload.data;
+            state.total=action.payload.meta.total
             //toast.success("category added succefully ?",{position: 'bottom-center'})
         });
         builder.addCase(fetchCategories.rejected, (state, action:any) => {

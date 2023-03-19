@@ -5,6 +5,7 @@ import {
     MouseEvent,
     useCallback,
     ReactElement,
+    useMemo,
 } from "react";
 
 // ** Next Import
@@ -59,6 +60,9 @@ import { Category } from "../types";
 // ** Custom Components Imports
 import AddProductDrawer from "src/views/apps/products/AddProductDrawer";
 import TableCategoryHeader from "src/components/product/category/TableCategoryHeader";
+import { Pagination } from "@mui/material";
+
+
 
 interface CategoryStatusType {
     [key: string]: ThemeColor;
@@ -201,7 +205,7 @@ const columns = [
         headerName: "Parent",
         field: "currentPlan",
         renderCell: ({ row }: CellType) => {
-            const { parent } = row;
+            const {parent} = row;
             return (
                 <div>
                     {parent ? (
@@ -210,7 +214,7 @@ const columns = [
                             noWrap
                             sx={{ textTransform: "capitalize" }}
                         >
-                            {parent?.category_name}
+                            {parent.category_name}
                         </Typography>
                     ) : (
                         <div>No parent</div>
@@ -255,39 +259,52 @@ const columns = [
 
 const index = () => {
     // ** State
-    const [role, setRole] = useState<string>("");
-    const [plan, setPlan] = useState<string>("");
     const [value, setValue] = useState<string>("");
-    const [status, setStatus] = useState<string>("");
-    const [pageSize, setPageSize] = useState<number>(10);
+    //const [pageSize, setPageSize] = useState<number>(10);
     const [addUserOpen, setAddUserOpen] = useState<boolean>(false);
 
     // ** Hooks
     const dispatch = useDispatch<AppDispatch>();
     //const store = useSelector((state: RootState) => state.user)
-    const { categories } = useSelector((state: RootState) => state.category);
+    const { categories,total } = useSelector((state: RootState) => state.category);
+    //const { pageInfo}    = useSelector(state: RootState) => state.category);
 
-    useEffect(() => {
-        dispatch(fetchCategories());
-    }, [dispatch, plan, role, status, value]);
+    
 
     const handleFilter = useCallback((val: string) => {
         setValue(val);
     }, []);
 
-    const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-        setRole(e.target.value);
-    }, []);
-
-    const handlePlanChange = useCallback((e: SelectChangeEvent) => {
-        setPlan(e.target.value);
-    }, []);
-
-    const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-        setStatus(e.target.value);
-    }, []);
-
     const toggleAddProductDrawer = () => setAddUserOpen(!addUserOpen);
+
+    //pagination
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(5);
+  
+    const queryOptions = useMemo(
+      () => ({
+        page,
+        pageSize,
+      }),
+      [page, pageSize],
+    );
+    useEffect(() => {
+      dispatch(fetchCategories(queryOptions));
+  },[page,pageSize]);
+  
+    //const { isLoading, data, pageInfo } = useQuery(queryOptions);
+  
+    // Some API clients return undefined while loading
+    // Following lines are here to prevent `rowCountState` from being undefined during the loading
+    const [rowCountState, setRowCountState] = useState(total || 0);
+
+    useEffect(() => {
+      setRowCountState((prevRowCountState) =>
+        total !== undefined
+          ? total
+          : prevRowCountState,
+      );
+    }, [total, setRowCountState]);
 
     return (
         <Grid container spacing={6}>
@@ -302,106 +319,6 @@ const index = () => {
                             },
                         }}
                     />
-                    <CardContent>
-                        <Grid container spacing={6}>
-                            <Grid item sm={4} xs={12}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="role-select">
-                                        Select Role
-                                    </InputLabel>
-                                    <Select
-                                        fullWidth
-                                        value={role}
-                                        id="select-role"
-                                        label="Select Role"
-                                        labelId="role-select"
-                                        onChange={handleRoleChange}
-                                        inputProps={{
-                                            placeholder: "Select Role",
-                                        }}
-                                    >
-                                        <MenuItem value="">
-                                            Select Role
-                                        </MenuItem>
-                                        <MenuItem value="admin">Admin</MenuItem>
-                                        <MenuItem value="author">
-                                            Author
-                                        </MenuItem>
-                                        <MenuItem value="editor">
-                                            Editor
-                                        </MenuItem>
-                                        <MenuItem value="maintainer">
-                                            Maintainer
-                                        </MenuItem>
-                                        <MenuItem value="subscriber">
-                                            Subscriber
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item sm={4} xs={12}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="plan-select">
-                                        Select Plan
-                                    </InputLabel>
-                                    <Select
-                                        fullWidth
-                                        value={plan}
-                                        id="select-plan"
-                                        label="Select Plan"
-                                        labelId="plan-select"
-                                        onChange={handlePlanChange}
-                                        inputProps={{
-                                            placeholder: "Select Plan",
-                                        }}
-                                    >
-                                        <MenuItem value="">
-                                            Select Plan
-                                        </MenuItem>
-                                        <MenuItem value="basic">Basic</MenuItem>
-                                        <MenuItem value="company">
-                                            Company
-                                        </MenuItem>
-                                        <MenuItem value="enterprise">
-                                            Enterprise
-                                        </MenuItem>
-                                        <MenuItem value="team">Team</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item sm={4} xs={12}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="status-select">
-                                        Select Status
-                                    </InputLabel>
-                                    <Select
-                                        fullWidth
-                                        value={status}
-                                        id="select-status"
-                                        label="Select Status"
-                                        labelId="status-select"
-                                        onChange={handleStatusChange}
-                                        inputProps={{
-                                            placeholder: "Select Role",
-                                        }}
-                                    >
-                                        <MenuItem value="">
-                                            Select Role
-                                        </MenuItem>
-                                        <MenuItem value="pending">
-                                            Pending
-                                        </MenuItem>
-                                        <MenuItem value="active">
-                                            Active
-                                        </MenuItem>
-                                        <MenuItem value="inactive">
-                                            Inactive
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        </Grid>
-                    </CardContent>
                 </Card>
             </Grid>
             <Grid item xs={12}>
@@ -414,11 +331,16 @@ const index = () => {
                     <DataGrid
                         autoHeight
                         rows={categories}
+                        rowsPerPageOptions={[5]}
                         columns={columns}
                         checkboxSelection
                         pageSize={pageSize}
+                        paginationMode="server"
+                        rowCount={rowCountState}
+                        pagination
+                        page={page}
+                        onPageChange={(newPage) =>  setPage(newPage)}
                         disableSelectionOnClick
-                        rowsPerPageOptions={[10, 25, 50]}
                         sx={{
                             "& .MuiDataGrid-columnHeaders": { borderRadius: 0 },
                         }}
@@ -431,5 +353,6 @@ const index = () => {
         </Grid>
     );
 };
+
 
 export default index;

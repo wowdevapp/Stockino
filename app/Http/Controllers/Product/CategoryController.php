@@ -17,9 +17,10 @@ class CategoryController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $categories=Category::with('parent')->get();
+        $perPage = $request->input('pageSize', 10);
+        $categories=Category::with('parent')->paginate($perPage);
         return CategoryResource::collection($categories);
     }
 
