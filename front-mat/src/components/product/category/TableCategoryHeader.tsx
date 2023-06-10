@@ -16,8 +16,8 @@ interface TableHeaderProps {
 const TableHeader = (props: TableHeaderProps) => {
   // ** Props
   const { handleFilter, toggle, value } = props;
-  const  geToAddProdcut = ()=>{
-    router.push('/product/category/add-category')
+  const  goToAddCategory = ()=>{
+    router.push('/product/category/add-category/')
   }
 
   return (
@@ -34,7 +34,7 @@ const TableHeader = (props: TableHeaderProps) => {
           onChange={e => handleFilter(e.target.value)}
         />
 
-        <Button sx={{ mb: 2 }} onClick={geToAddProdcut} variant='contained'>
+        <Button sx={{ mb: 2 }} onClick={goToAddCategory} variant='contained'>
           Add Category
         </Button>
       </Box>

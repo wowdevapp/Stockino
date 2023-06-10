@@ -1,30 +1,31 @@
 // ** Redux Imports
-import { Dispatch } from "redux";
 import toast from "react-hot-toast";
+import { Dispatch } from "redux";
 
 import {
-    createSlice,
-    createAsyncThunk,
-    isRejectedWithValue,
-    PayloadAction,
+    createAsyncThunk, createSlice
 } from "@reduxjs/toolkit";
-import { setError } from "../../slices/errorSlice";
 // ** Axios Imports
-import axios, { AxiosError } from "axios";
-import backend from "src/configs/backend";
+import axios from "axios";
 import authConfig from "src/configs/auth";
-import { ApiError } from "next/dist/server/api-utils";
+import backend from "src/configs/backend";
 
 interface Category {
+    id: number | null;
     category_name: String;
     category_slug: String;
-    id: number | null;
+    parent_id:number |null,
+    description: string|null,
+    active: boolean,
+    thumbnail:string|null,
 }
 
 
 interface CategoryState {
-    categories: Category[];
+    categories: any[];
     selectedCategory:Category |null;
+    apiErrors:any,
+    total:number
 }
 
 interface Redux {
@@ -32,6 +33,12 @@ interface Redux {
     dispatch: Dispatch<any>;
 }
 
+const initialState:CategoryState={
+    categories: [],
+    selectedCategory: null,
+    apiErrors:null,
+    total:0
+}
 // ** Fetch categories
 
 // ** Add Category
@@ -54,7 +61,28 @@ export const addCategory = createAsyncThunk(
         } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
-        
+
+    }
+);
+export const getCategoryById =  createAsyncThunk(
+    "getCategoryById",
+    async (id:number | string, {rejectWithValue}) => {
+        try {
+            const response = await axios.get(
+                backend.path + "/product/category/"+id,
+                {
+                    headers: {
+                        Authorization: `Bearer ${window.localStorage.getItem(
+                            authConfig.storageTokenKeyName
+                        )}`,
+                    },
+                }
+            );
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+
     }
 );
 
@@ -77,18 +105,13 @@ export const fetchCategories= createAsyncThunk(
         } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
-        
+
     }
 );
 
 export const appProductCategorySlice = createSlice({
     name: "ProductCategory",
-    initialState:{
-        categories: [],
-        selectedCategory: null,
-        apiErrors:null,
-        total:0
-    },
+    initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(addCategory.fulfilled, (state, action) => {
@@ -98,17 +121,24 @@ export const appProductCategorySlice = createSlice({
         builder.addCase(addCategory.rejected, (state, action:any) => {
             state.apiErrors= action.payload
             toast.error(state.apiErrors?.message,{position: 'bottom-center'})
-            
         });
         //fetch categories
         builder.addCase(fetchCategories.fulfilled, (state, action) => {
             state.categories = action.payload.data;
             state.total=action.payload.meta.total
-            //toast.success("category added succefully ?",{position: 'bottom-center'})
         });
         builder.addCase(fetchCategories.rejected, (state, action:any) => {
             state.apiErrors= action.payload
-            toast.error(state.apiErrors?.message,{position: 'bottom-center'})           
+            toast.error(state.apiErrors?.message,{position: 'bottom-center'})
+        });
+        //selected category
+        builder.addCase(getCategoryById.fulfilled, (state, action) => {
+            state.selectedCategory = action.payload.data;
+            console.log(state.selectedCategory);
+        });
+        builder.addCase(getCategoryById.rejected, (state, action:any) => {
+            state.apiErrors= action.payload
+            toast.error(state.apiErrors?.message,{position: 'bottom-center'})
         });
     },
 });

@@ -21,7 +21,8 @@ class CategoryResource extends JsonResource
             'category_name'=>$this->resource->category_name,
             'category_slug'=>$this->resource->category_slug,
             'active'=>$this->resource->active,
-            'parent' => new CategoryResource($this->whenLoaded('parent')),
+            'parent_id'=>$this->resource->parent?->parent_id,
+            'parent'=>$this->resource->parent
         ];
     }
 }

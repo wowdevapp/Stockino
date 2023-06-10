@@ -298,7 +298,7 @@ const index = (props: AddProductType) => {
                                     id="Category"
                                     label="Category"
                                     labelId="category"
-                                    onChange={(e) => setRole(e.target.value)}
+                                    onChange={(e) => {}}
                                     inputProps={{ placeholder: "category" }}
                                 >
                                     <MenuItem value="admin">Admin</MenuItem>
@@ -324,7 +324,7 @@ const index = (props: AddProductType) => {
                                     id="supplier"
                                     label="supllier"
                                     labelId="suplier"
-                                    onChange={(e) => setRole(e.target.value)}
+                                    onChange={(e) => {}}
                                     inputProps={{ placeholder: "supplier" }}
                                 >
                                     <MenuItem value="admin">Admin</MenuItem>
@@ -378,7 +378,7 @@ const index = (props: AddProductType) => {
                             id="barcode_symbiology"
                             label="barcode symbiology"
                             labelId="barcode_symbiology"
-                            onChange={(e) => setRole(e.target.value)}
+                            onChange={(e) => {}}
                             inputProps={{ placeholder: "barcode symbiology" }}
                         >
                             <MenuItem value="admin">Admin</MenuItem>
@@ -396,7 +396,7 @@ const index = (props: AddProductType) => {
                             id="box"
                             label="box"
                             labelId="box"
-                            onChange={(e) => setRole(e.target.value)}
+                            onChange={(e) => {}}
                             inputProps={{ placeholder: "box" }}
                         >
                             <MenuItem value="admin">Admin</MenuItem>
@@ -414,7 +414,7 @@ const index = (props: AddProductType) => {
                             id="unit"
                             label="unit"
                             labelId="unit"
-                            onChange={(e) => setRole(e.target.value)}
+                            onChange={(e) =>{}}
                             inputProps={{ placeholder: "unit" }}
                         >
                             <MenuItem value="admin">Admin</MenuItem>

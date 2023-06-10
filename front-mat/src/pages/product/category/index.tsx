@@ -1,11 +1,7 @@
 // ** React Imports
 import {
-    useState,
-    useEffect,
     MouseEvent,
-    useCallback,
-    ReactElement,
-    useMemo,
+    useCallback, useEffect, useMemo, useState
 } from "react";
 
 // ** Next Import
@@ -14,53 +10,42 @@ import Link from "next/link";
 // ** MUI Imports
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import Menu from "@mui/material/Menu";
+import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
-import { DataGrid } from "@mui/x-data-grid";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import CardHeader from "@mui/material/CardHeader";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import CardContent from "@mui/material/CardContent";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { DataGrid } from "@mui/x-data-grid";
+
 
 // ** Icons Imports
-import Laptop from "mdi-material-ui/Laptop";
-import ChartDonut from "mdi-material-ui/ChartDonut";
-import CogOutline from "mdi-material-ui/CogOutline";
-import EyeOutline from "mdi-material-ui/EyeOutline";
-import DotsVertical from "mdi-material-ui/DotsVertical";
-import PencilOutline from "mdi-material-ui/PencilOutline";
+
 import DeleteOutline from "mdi-material-ui/DeleteOutline";
-import AccountOutline from "mdi-material-ui/AccountOutline";
+import DotsVertical from "mdi-material-ui/DotsVertical";
+import EyeOutline from "mdi-material-ui/EyeOutline";
+import PencilOutline from "mdi-material-ui/PencilOutline";
 
 // ** Store Imports
 import { useDispatch, useSelector } from "react-redux";
 
 // ** Custom Components Imports
 import CustomChip from "src/@core/components/mui/chip";
-import CustomAvatar from "src/@core/components/mui/avatar";
 
-// ** Utils Import
-import { getInitials } from "src/@core/utils/get-initials";
 
 // ** Actions Imports
-import { fetchData, deleteUser } from "src/store/apps/user";
 import { fetchCategories } from "src/store/apps/product/category";
+import { deleteUser } from "src/store/apps/user";
 
 // ** Types Imports
-import { RootState, AppDispatch } from "src/store";
 import { ThemeColor } from "src/@core/layouts/types";
-import { UsersType } from "src/types/apps/userTypes";
+import { AppDispatch, RootState } from "src/store";
 import { Category } from "../types";
 
 // ** Custom Components Imports
-import AddProductDrawer from "src/views/apps/products/AddProductDrawer";
+import router from "next/router";
 import TableCategoryHeader from "src/components/product/category/TableCategoryHeader";
-import { Pagination } from "@mui/material";
 
 
 
@@ -120,6 +105,11 @@ const RowOptions = ({ id }: { id: number | string }) => {
         handleRowOptionsClose();
     };
 
+    const handleEdit=()=>{
+        router.push('/product/category/add-category?id='+id)
+        handleRowOptionsClose();
+    }
+
     return (
         <>
             <IconButton size="small" onClick={handleRowOptionsClick}>
@@ -148,7 +138,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
                         </MenuItemLink>
                     </Link>
                 </MenuItem>
-                <MenuItem onClick={handleRowOptionsClose}>
+                <MenuItem onClick={handleEdit}>
                     <PencilOutline fontSize="small" sx={{ mr: 2 }} />
                     Edit
                 </MenuItem>
@@ -269,7 +259,7 @@ const index = () => {
     const { categories,total } = useSelector((state: RootState) => state.category);
     //const { pageInfo}    = useSelector(state: RootState) => state.category);
 
-    
+
 
     const handleFilter = useCallback((val: string) => {
         setValue(val);
@@ -280,7 +270,7 @@ const index = () => {
     //pagination
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
-  
+
     const queryOptions = useMemo(
       () => ({
         page,
@@ -291,11 +281,7 @@ const index = () => {
     useEffect(() => {
       dispatch(fetchCategories(queryOptions));
   },[page,pageSize]);
-  
-    //const { isLoading, data, pageInfo } = useQuery(queryOptions);
-  
-    // Some API clients return undefined while loading
-    // Following lines are here to prevent `rowCountState` from being undefined during the loading
+
     const [rowCountState, setRowCountState] = useState(total || 0);
 
     useEffect(() => {
@@ -331,15 +317,15 @@ const index = () => {
                     <DataGrid
                         autoHeight
                         rows={categories}
-                        rowsPerPageOptions={[5]}
+                        rowsPerPageOptions={[5,10,20]}
                         columns={columns}
                         checkboxSelection
                         pageSize={pageSize}
                         paginationMode="server"
                         rowCount={rowCountState}
                         pagination
-                        page={page}
-                        onPageChange={(newPage) =>  setPage(newPage)}
+                        page={page-1}
+                        onPageChange={(newPage) =>  setPage(newPage+1)}
                         disableSelectionOnClick
                         sx={{
                             "& .MuiDataGrid-columnHeaders": { borderRadius: 0 },

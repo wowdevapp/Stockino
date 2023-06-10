@@ -33,7 +33,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request): CategoryResource
     {
-        $category =Category::create($request->getFilteredAttributes());
+        $category =Category::create($request->getFilteredAttributes())->load('parent');
         return new CategoryResource($category);
     }
 
@@ -45,7 +45,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        $category->load('parent');
+        return new CategoryResource($category);
     }
 
     /**
@@ -56,7 +57,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        dd($category);
     }
 
     /**
