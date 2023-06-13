@@ -106,7 +106,11 @@ const RowOptions = ({ id }: { id: number | string }) => {
     };
 
     const handleEdit=()=>{
-        router.push('/product/category/add-category?id='+id)
+
+        /* .then(() => {
+            router.push('/product/category/edit/'+id)
+        }); */
+        router.push('/product/category/edit/'+id)
         handleRowOptionsClose();
     }
 

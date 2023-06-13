@@ -25,6 +25,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/settings', [GeneralSettingsController::class, 'show']);
     Route::group(['prefix' => 'product'], function () {
         Route::apiResource('/category', CategoryController::class);
-        Route::apiResource('/product',productsController::class);
+       // Route::apiResource('/product',productsController::class);
     });
 });

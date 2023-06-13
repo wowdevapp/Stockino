@@ -10,27 +10,16 @@ class CategoryRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
      * @return array
      */
     public function rules(): array
     {
-
         return [
-            'category_name' => [
-                'required',
-                'max:255',
-            ],
-            'category_slug' =>
-                ['required'],
-            'active'=>['bool'],
-            'parent_id'=>
-                [
-                    'nullable',
-                    Rule::exists('categories','id'),
-                ]
+            'category_name' => ['required','max:50'],
+            'category_slug' => ['max:255','required'],
+            'active'=>['boolean','nullable'],
+            'parent_id'=>[ 'nullable', Rule::exists('categories','id')]
         ];
-
     }
 
     public function getFilteredAttributes(): array

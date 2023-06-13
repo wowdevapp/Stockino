@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use JetBrains\PhpStorm\NoReturn;
 
 class CategoryController extends Controller
 {
@@ -40,36 +41,27 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Category  $category
-     * @return Response
+     * @param  Category  $category
+     * @return CategoryResource
      */
-    public function show(Category $category)
+    public function show(Category $category): CategoryResource
     {
         $category->load('parent');
         return new CategoryResource($category);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return Response
-     */
-    public function edit(Category $category)
-    {
-        dd($category);
-    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  \App\Models\Category  $category
-     * @return Response
+     * @param  CategoryRequest  $request
+     * @param  Category  $category
+     * @return CategoryResource
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category): CategoryResource
     {
-        //
+        $category->update($request->getFilteredAttributes());
+        return new CategoryResource($category);
     }
 
     /**

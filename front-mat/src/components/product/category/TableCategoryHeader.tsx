@@ -17,7 +17,7 @@ const TableHeader = (props: TableHeaderProps) => {
   // ** Props
   const { handleFilter, toggle, value } = props;
   const  goToAddCategory = ()=>{
-    router.push('/product/category/add-category/')
+    router.push('/product/category/add/')
   }
 
   return (
