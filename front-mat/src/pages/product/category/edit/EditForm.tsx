@@ -68,10 +68,6 @@ const EditeForm = ({category}) => {
 
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-        console.log("call edite dispatch");
-        /* await dispatch(addCategory(data)).then(() => {
-            router.back()
-        }); */
         dispatch(editCategory(data));
     };
 
